@@ -1,9 +1,12 @@
 CC = g++
 CFLAGS = -std=c++11 -g
 SDLFLAGS = -I/usr/local/include/SDL2 -I/usr/X11/include -D_THREAD_SAFE -L/usr/local/lib -lSDL2 -lSDL2_image
-OBJECTS = main.o Engine.o Renderer.o TextureManager.o
+ENTITIES = CharacterEntity.o
+COMPONENTS = RenderComponent.o
+SYSTEMS = RenderSystem.o
+OBJECTS = main.o Engine.o Renderer.o TextureManager.o $(ENTITIES) $(COMPONENTS) $(SYSTEMS)
 EXECUTABLE = out
-VPATH = src
+VPATH = src src/Component src/Entity src/System
 DOXYGENFILE = Doxyfile
 DOXYGEN = doxygen
 

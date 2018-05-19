@@ -13,22 +13,29 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	std::queue<SDL_Texture*> renderQueue;
+
+	const char* title;
+	int width; int height;
+	int x; int y;
+	Uint32 flags;
 public:
 	/**
 	 * Constructs the renderer.
-	 * @param title the title on the window.
-	 * @param width the width of the window.
-	 * @param height the height of the window.
-	 * @param x the x position of the window, or SDL_WINDOWPOS_UNDEFINED.
-	 * @param y the y position of the window, or SDL_WINDOWPOS_UNDEFINED.
-	 * @param flags the flags for creating the window, like SDL_WINDOW_FULLSCREEN.
+	 * @param t the title on the window.
+	 * @param w the width of the window.
+	 * @param h the height of the window.
+	 * @param x_ the x position of the window, or SDL_WINDOWPOS_UNDEFINED.
+	 * @param y_ the y position of the window, or SDL_WINDOWPOS_UNDEFINED.
+	 * @param f the flags for creating the window, like SDL_WINDOW_FULLSCREEN.
 	 */
-	Renderer(const char* title,
-			 int width = 640, int height = 480,
-			 int x = SDL_WINDOWPOS_UNDEFINED, int y = SDL_WINDOWPOS_UNDEFINED,
-			 Uint32 flags = 0);
+	Renderer(const char* t,
+			 int w = 640, int h = 480,
+			 int x_ = SDL_WINDOWPOS_UNDEFINED, int y_ = SDL_WINDOWPOS_UNDEFINED,
+			 Uint32 f = 0);
 
 	~Renderer();
+
+	void init();
 
 	/**
 	 * Creates a texture from a given surface, optimized to this renderer.

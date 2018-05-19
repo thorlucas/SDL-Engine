@@ -3,19 +3,13 @@
 using namespace Thor_Lucas_Development;
 
 int main(int argc, char const *argv[]) {
-	Engine* engine = new Engine();
-	Renderer* renderer = new Renderer("Hello, World!");
-	TextureManager* textureManager = new TextureManager(renderer, "./resources/");
-	
-	engine->setRenderer(renderer);
-	engine->setTextureManager(textureManager);
+	Renderer renderer = Renderer("Hello, World!");
+	TextureManager textureManager = TextureManager(renderer, "./resources/");
+	RenderSystem renderSystem = RenderSystem(renderer, textureManager);
 
-	textureManager->createTexture("bg.jpg", "background");
+	Engine engine = Engine(renderSystem);
 
-	engine->mainLoop();
-
-	delete renderer;
-	delete engine;
+	engine.mainLoop();
 
 	return 0;
 }

@@ -13,7 +13,7 @@ namespace Thor_Lucas_Development {
 /** Texture manager for tiles, sprites, etc. */
 class TextureManager {
 private:
-	Renderer* renderer; /**< The renderer used when creating textures. */
+	Renderer& renderer; /**< The renderer used when creating textures. */
 	std::map<std::string, SDL_Texture*> textureMap;
 	std::string resourcePath;
 public:
@@ -22,10 +22,12 @@ public:
 	 * @param r renderer.
 	 * @param rp the path to the resources folder.
 	 */
-	TextureManager(Renderer* r, std::string rp = "");
+	TextureManager(Renderer& r, std::string rp = "");
 	~TextureManager();	
 
-	void createTexture(std::string fileName, std::string textureName);
+	void init();
+
+	SDL_Texture* createTexture(std::string fileName, std::string textureName);
 
 	SDL_Texture* getTexture(std::string textureName);
 };

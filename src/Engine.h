@@ -3,8 +3,8 @@
 
 #include <SDL.h>
 #include "EngineException.h"
-#include "Renderer.h"
-#include "TextureManager.h"
+
+#include "System/RenderSystem.h"
 
 namespace Thor_Lucas_Development {
 
@@ -13,25 +13,11 @@ namespace Thor_Lucas_Development {
 /** An SDL engine for games. */
 class Engine {
 private:
-	Renderer* renderer;
-	TextureManager* textureManager;	
+	RenderSystem& renderSystem;
+	RenderComponent* dummy;
 public:
-	Engine();
+	Engine(RenderSystem& rs);
 	~Engine();
-
-	/** 
-	 * Sets the current renderer to be used.
-	 * @param r the renderer.
-	 * TODO: Meh
-	 */
-	void setRenderer(Renderer* r);
-
-	/**
-	 * Sets the current texture manager to be used.
-	 * @param t the texture manager.
-	 * TODO: Meh
-	 */
-	void setTextureManager(TextureManager* t);
 
 	void mainLoop();
 };
