@@ -2,40 +2,29 @@
 #define _GRAPHICS_COMPONENT_H_
 
 #include <SDL.h>
+#include "../System/DebugSystem.h"
 
 namespace Thor_Lucas_Development {
 
 class RenderComponent {
+friend class RenderSystem;
 private:
-	bool dead;
-
-	union {
-		struct {
-			SDL_Texture* texture;
-			SDL_Rect drect;
-		} live;
-
-		RenderComponent* nextDead;
-	};
+	SDL_Texture* texture;
 public:
-	RenderComponent();
-	~RenderComponent();
+	SDL_Rect dest; // Temp
+
+	RenderComponent() {};
+	~RenderComponent() {};
 
 	bool isDead();
 	SDL_Texture* getTexture();
 
 	/**
-	 * Initializes the component, setting it to not dead.
+	 * Initializes the component.
 	 * @param t the texture to be rendered.
-	 * @returns a pointer to the next dead component.
 	 */
-	RenderComponent* init(SDL_Texture* t);	
-
-	/**
-	 * Kills the component, setting it to dead.
-	 * @param d the next dead component in the pool.
-	 */
-	void kill(RenderComponent* d);
+	void init(SDL_Texture* t, int x, int y, int w, int h);
+	void quit();
 };
 
 }

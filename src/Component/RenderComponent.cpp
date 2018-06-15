@@ -2,32 +2,17 @@
 
 namespace Thor_Lucas_Development {
 
-RenderComponent::RenderComponent() { }
-
-RenderComponent::~RenderComponent() { }
-
-bool RenderComponent::isDead() {
-	return dead;
+void RenderComponent::init(SDL_Texture* t, int x, int y, int w, int h) {
+	texture = t;
+	dest.x = x; dest.y = y; dest.w = w; dest.h = h;
 }
 
 SDL_Texture* RenderComponent::getTexture() {
-	return live.texture;
+	return texture;
 }
 
-RenderComponent* RenderComponent::init(SDL_Texture* t) {
-	dead = false;
+void RenderComponent::quit() {
 
-	live.texture = t;
-	// TODO
-	live.drect.x = 0; live.drect.y = 0;
-	live.drect.w = 64; live.drect.h = 64;
-
-	return nextDead;
-}
-
-void RenderComponent::kill(RenderComponent* d) {
-	dead = true;
-	nextDead = d;
 }
 
 }

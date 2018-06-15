@@ -7,12 +7,24 @@ namespace Thor_Lucas_Development {
 
 class CharacterEntity {
 private:
-	RenderComponent* graphics;
+	RenderComponent* render;
 public:
-	CharacterEntity(RenderComponent* g);
+	/**
+	 * Creates the entity.
+	 * @param g a render component, which should be returned from the RenderSystem.
+	 */
+	CharacterEntity(RenderComponent* render);
 
-	/** TODO: Does character entity own this component? */
+	/**
+	 * The character should be deleted by a manager,
+	 * which will properly destroy the render component.
+	 * TODO: What if it's not? Should we set a flag?
+	 * the render system could loop through and kill
+	 * the components that are flagged for death.
+	 */
 	~CharacterEntity();
+
+	RenderComponent* getRender();
 };
 
 }

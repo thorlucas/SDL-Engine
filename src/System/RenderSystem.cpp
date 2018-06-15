@@ -1,46 +1,40 @@
 #include "RenderSystem.h"
+#include "../Engine.h"
 
 namespace Thor_Lucas_Development {
+	
+void RenderSystem::init(const char* t, int w, int h, int x, int y, Uint32 f) {
+	if (SDL_WasInit(SDL_INIT_VIDEO) == 0) throw EngineException("SDL is not initialized.");
 
-RenderSystem::RenderSystem(Renderer& r, TextureManager& tm) : renderer(r), textureManager(tm) {
-	poolHead = &pool[0];
-	for (int i = 0; i < POOL_SIZE; ++i) {
-		pool[i] = RenderComponent();
-		pool[i].kill(i != POOL_SIZE-1 ? &pool[i+1] : nullptr);
-	}
+	window = nullptr; renderer = nullptr;
+
+	window = SDL_CreateWindow(t, x, y, w, h, f);
+	if (window == nullptr) throw EngineException("Failed to initialize window.");
+
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if (renderer == nullptr) throw EngineException("Failed to initialize renderer.");
 }
 
-RenderSystem::~RenderSystem() { }
-
-void RenderSystem::init() {
-	renderer.init();
-	textureManager.init();
-
-	textureManager.createTexture("bg.jpg", "dummy");
-}
-
-RenderComponent* RenderSystem::createRenderComponent() {
-	SDL_Texture* texture = textureManager.getTexture("dummy");
-
-	RenderComponent* component = poolHead;
-	poolHead = component->init(texture);
-
-	return component;
-}
-
-void RenderSystem::killRenderComponent(RenderComponent* component) {
-	component->kill(poolHead);
-	poolHead = component;
+void RenderSystem::quit() {
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 }
 
 void RenderSystem::render() {
-	for (int i = 0; i < POOL_SIZE; ++i) {
-		if (!pool[i].isDead()) {
-			renderer.addToRenderQueue(pool[i].getTexture());
-		}
+	SDL_RenderClear(renderer);
+	for (auto it = components.begin(); it != components.end(); ++it) {
+		SDL_RenderCopy(renderer, it->texture, NULL, &it->dest);
 	}
+	SDL_RenderPresent(renderer);
+}
 
-	renderer.render();
+SDL_Renderer* RenderSystem::getRenderer() {
+	return renderer;
+}
+
+RenderComponent& RenderSystem::getNewComponent() {
+	components.emplace_back();
+	return components.back();
 }
 
 } // namespace Thor_Lucas_Development

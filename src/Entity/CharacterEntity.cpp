@@ -2,10 +2,12 @@
 
 namespace Thor_Lucas_Development {
 
-CharacterEntity::CharacterEntity(RenderComponent* g) : graphics(g) { }
+CharacterEntity::CharacterEntity(RenderComponent* r) : render(r) { }
 
-CharacterEntity::~CharacterEntity() {
-	delete graphics;
+CharacterEntity::~CharacterEntity() { }
+
+RenderComponent* CharacterEntity::getRender() {
+	return render;
 }
 
 }
