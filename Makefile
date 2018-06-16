@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++11 -g
-SDLFLAGS = -I/usr/local/include/SDL2 -I/usr/X11/include -D_THREAD_SAFE -L/usr/local/lib -lSDL2 -lSDL2_image
+SDLFLAGS = -I/usr/local/include/SDL2 -I/usr/X11/include -D_THREAD_SAFE -lSDL2 -lSDL2_image # -L/usr/local/lib
 ENTITIES = 
 COMPONENTS = RenderComponent.o
 SYSTEMS = RenderSystem.o ResourceSystem.o DebugSystem.o EventSystem.o LogicSystem.o
