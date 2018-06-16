@@ -11,8 +11,4 @@ SDL_Texture* RenderComponent::getTexture() {
 	return texture;
 }
 
-void RenderComponent::quit() {
-
-}
-
 }

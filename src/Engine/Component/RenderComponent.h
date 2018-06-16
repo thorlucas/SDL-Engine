@@ -11,12 +11,11 @@ friend class RenderSystem;
 private:
 	SDL_Texture* texture;
 public:
-	SDL_Rect dest; // Temp
+	SDL_Rect dest; // TODO: temporary
 
 	RenderComponent() {};
 	~RenderComponent() {};
 
-	bool isDead();
 	SDL_Texture* getTexture();
 
 	/**
@@ -24,7 +23,7 @@ public:
 	 * @param t the texture to be rendered.
 	 */
 	void init(SDL_Texture* t, int x, int y, int w, int h);
-	void quit();
+	void quit() {};
 };
 
 }

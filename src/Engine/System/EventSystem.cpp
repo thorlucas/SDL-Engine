@@ -52,8 +52,6 @@ void EventSystem::attachKey(EventObserver* o, SDL_Keycode code) {
 	entry->observer = o;
 
 	keyObservers[code] = entry;
-
-	DebugSystem::slog("[EventSystem] Attached key");
 }
 
 void EventSystem::attachType(EventObserver* o, SDL_EventType type) {

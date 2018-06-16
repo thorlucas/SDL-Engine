@@ -8,7 +8,7 @@ namespace Thor_Lucas_Development {
 
 class LogicSystem {
 private:
-	std::vector<LogicComponent> components;
+	std::vector<LogicComponent*> components;
 public:
 	LogicSystem() {};
 	~LogicSystem() {};
@@ -18,7 +18,7 @@ public:
 
 	void update();
 
-	LogicComponent& getNewComponent();
+	void addLogicComponent(LogicComponent* l);
 };
 
 }

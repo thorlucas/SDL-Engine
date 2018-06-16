@@ -22,8 +22,8 @@ void RenderSystem::quit() {
 
 void RenderSystem::render() {
 	SDL_RenderClear(renderer);
-	for (auto it = components.begin(); it != components.end(); ++it) {
-		SDL_RenderCopy(renderer, it->texture, NULL, &it->dest);
+	for (auto it : components) {
+		SDL_RenderCopy(renderer, it.texture, NULL, &it.dest);
 	}
 	SDL_RenderPresent(renderer);
 }

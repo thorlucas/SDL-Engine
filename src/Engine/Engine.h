@@ -7,6 +7,7 @@
 #include "System/ResourceSystem.h"
 #include "System/DebugSystem.h"
 #include "System/EventSystem.h"
+#include "System/LogicSystem.h"
 
 namespace Thor_Lucas_Development {
 
@@ -20,6 +21,7 @@ private:
 	RenderSystem renderSystem;
 	ResourceSystem resourceSystem;
 	DebugSystem debugSystem;
+	LogicSystem logicSystem;
 
 	bool quit;
 public:
@@ -33,10 +35,11 @@ public:
 
 	void init();
 
-	RenderSystem& getRenderSystem();
-	ResourceSystem& getResourceSystem();
-	DebugSystem& getDebugSystem();
-	EventSystem& getEventSystem();
+	RenderSystem& 	getRenderSystem		();
+	ResourceSystem& getResourceSystem	();
+	DebugSystem& 	getDebugSystem		();
+	EventSystem& 	getEventSystem		();
+	LogicSystem& 	getLogicSystem		();
 
 	void mainLoop();
 

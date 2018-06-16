@@ -9,6 +9,7 @@ Engine::Engine() {
 
 	// init debug system
 	// init event system
+	// init logic system
 	renderSystem.init("Hello, world!");
 	resourceSystem.init(renderSystem.getRenderer());
 }
@@ -17,16 +18,15 @@ Engine::~Engine() {
 	resourceSystem.quit();
 	renderSystem.quit();
 	// quit debug system
+	// quit event system
+	// quit logic system
 
 	SDL_Quit();
 }
 
 void Engine::init() {
 	quit = false;
-	
 	eventSystem.attachType(this, SDL_QUIT);
-
-	resourceSystem.loadTexture("bg", "./resources/bg.jpg");
 }
 
 EventSystem& Engine::getEventSystem() {
@@ -45,17 +45,23 @@ DebugSystem& Engine::getDebugSystem() {
 	return debugSystem;
 }
 
+LogicSystem& Engine::getLogicSystem() {
+	return logicSystem;
+}
+
 void Engine::mainLoop() {
 	while (!quit) {
 		eventSystem.handleEvents();
+		logicSystem.update();
 		renderSystem.render();
 	}
 }
 
 void Engine::event(SDL_Event& event) {
-	if (event.type == SDL_QUIT) {
+	// TODO: Conditional not needed for now since we're only subscribed to quit.
+	// if (event.type == SDL_QUIT) {
 		quit = true;
-	}
+	// }
 }
 
 } // namespace Thor_Lucas_Development

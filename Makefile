@@ -3,10 +3,10 @@ CFLAGS = -std=c++11 -g
 SDLFLAGS = -I/usr/local/include/SDL2 -I/usr/X11/include -D_THREAD_SAFE -L/usr/local/lib -lSDL2 -lSDL2_image
 ENTITIES = 
 COMPONENTS = RenderComponent.o
-SYSTEMS = RenderSystem.o ResourceSystem.o DebugSystem.o EventSystem.o
+SYSTEMS = RenderSystem.o ResourceSystem.o DebugSystem.o EventSystem.o LogicSystem.o
 OBJECTS = main.o Engine.o $(ENTITIES) $(COMPONENTS) $(SYSTEMS)
 EXECUTABLE = out
-VPATH = src src/Component src/Entity src/System
+VPATH = src src/Engine src/Engine/Component src/Engine/Entity src/Engine/System
 DOXYGENFILE = Doxyfile
 DOXYGEN = doxygen
 
