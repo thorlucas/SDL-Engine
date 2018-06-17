@@ -6,7 +6,7 @@
 
 namespace Thor_Lucas_Development {
 
-class LogicComponent : public EventObserver {
+class LogicComponent {
 friend class LogicSystem;
 public:
 	LogicComponent() {};
@@ -16,7 +16,6 @@ public:
 	virtual void quit() = 0;
 
 	virtual void update() = 0;
-	virtual void event(SDL_Event& event) = 0;
 };
 
 }

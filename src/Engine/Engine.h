@@ -15,7 +15,7 @@ namespace Thor_Lucas_Development {
  * An SDL engine for games. 
  * This is a singleton. Get it by calling Engine::get().
  */
-class Engine : public EventObserver {
+class Engine {
 private:
 	EventSystem eventSystem;
 	RenderSystem renderSystem;
@@ -42,9 +42,6 @@ public:
 	LogicSystem& 	getLogicSystem		();
 
 	void mainLoop();
-
-	// Event Observer
-	void event(SDL_Event& event);
 };
 
 } // namespace Thor_Lucas_Development

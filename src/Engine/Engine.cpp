@@ -26,7 +26,9 @@ Engine::~Engine() {
 
 void Engine::init() {
 	quit = false;
-	eventSystem.attachType(this, SDL_QUIT);
+	eventSystem.attachType([&](Event::Event& event) {
+		if (event.type == Event::QUIT) quit = true;
+	}, Event::QUIT);
 }
 
 EventSystem& Engine::getEventSystem() {
@@ -55,13 +57,6 @@ void Engine::mainLoop() {
 		logicSystem.update();
 		renderSystem.render();
 	}
-}
-
-void Engine::event(SDL_Event& event) {
-	// TODO: Conditional not needed for now since we're only subscribed to quit.
-	// if (event.type == SDL_QUIT) {
-		quit = true;
-	// }
 }
 
 } // namespace Thor_Lucas_Development

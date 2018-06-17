@@ -4,38 +4,37 @@
 namespace Thor_Lucas_Development {
 
 void EventSystem::notifyKey() {
-	auto found = keyObservers.find(event.key.keysym.sym);
-	if (found == keyObservers.end()) {
-		return;
-	}
-	ObserverEntry* entry = found->second;
+	ObserverEntry* entry = keyObservers[event.key];
+	if (entry == nullptr) return;
+
 	do {
-		entry->observer->event(event);
+		entry->callback(event);
 		entry = entry->nextEntry;
 	} while (entry != nullptr);
 }
 
 void EventSystem::notifyType() {
-	auto found = typeObservers.find(event.type);
-	if (found == typeObservers.end()) return;
-	ObserverEntry* entry = found->second;
+	ObserverEntry* entry = typeObservers[event.type];
+	if (entry == nullptr) return;
+
 	do {
-		entry->observer->event(event);
+		entry->callback(event);
 		entry = entry->nextEntry;
 	} while (entry != nullptr);
 }
 
 void EventSystem::handleEvents() {
-	while (SDL_PollEvent(&event) != 0) {
+	while (SDL_PollEvent(&sdlevent) != 0) {
+		Event::convertEvent(sdlevent, event);
 		switch (event.type) {
-			case SDL_QUIT:
+			case Event::QUIT:
 				notifyType();
 				break;
-			case SDL_KEYDOWN:
+			case Event::KEYDOWN:
 				notifyType();
 				notifyKey();
 				break;
-			case SDL_KEYUP:
+			case Event::KEYUP:
 				notifyType();
 				notifyKey();
 				break;
@@ -44,23 +43,15 @@ void EventSystem::handleEvents() {
 	}
 }
 
-void EventSystem::attachKey(EventObserver* o, SDL_Keycode code) {
-	auto found = keyObservers.find(code);
-	ObserverEntry* last = (found == keyObservers.end()) ? nullptr : found->second;
-	ObserverEntry* entry = new ObserverEntry;
-	entry->nextEntry = last;
-	entry->observer = o;
-
+void EventSystem::attachKey(Event::EventCallback callback, Event::Keycode code) {
+	ObserverEntry* last = keyObservers[code];
+	ObserverEntry* entry = new ObserverEntry(callback, last);
 	keyObservers[code] = entry;
 }
 
-void EventSystem::attachType(EventObserver* o, SDL_EventType type) {
-	auto found = typeObservers.find(type);
-	ObserverEntry* last = (found == typeObservers.end()) ? nullptr : found->second;
-	ObserverEntry* entry = new ObserverEntry;
-	entry->nextEntry = last;
-	entry->observer = o;
-
+void EventSystem::attachType(Event::EventCallback callback, Event::EventType type) {
+	ObserverEntry* last = typeObservers[type];
+	ObserverEntry* entry = new ObserverEntry(callback, last);
 	typeObservers[type] = entry;
 }
 

@@ -10,7 +10,7 @@ struct Entity {
 class ExLogic : public LogicComponent {
 private:
 	RenderComponent* render;
-	bool move;
+	bool moveLeft, moveRight, moveUp, moveDown;
 public:
 	ExLogic() {};
 	~ExLogic() {};
@@ -18,23 +18,27 @@ public:
 	void init() {};
 	void init(EventSystem& es, RenderComponent* rc) {
 		render = rc;
-		es.attachKey(this, SDLK_d);
+		es.attachKey([&](Event::Event& event) {
+			moveRight = (event.type == Event::KEYDOWN);
+		}, Event::D);
+		es.attachKey([&](Event::Event& event) {
+			moveLeft = (event.type == Event::KEYDOWN);
+		}, Event::A);
+		es.attachKey([&](Event::Event& event) {
+			moveUp = (event.type == Event::KEYDOWN);
+		}, Event::W);
+		es.attachKey([&](Event::Event& event) {
+			moveDown = (event.type == Event::KEYDOWN);
+		}, Event::S);
 	}
 
 	void quit() {};
 
-	void event(SDL_Event& event) {
-		if (event.key.type == SDL_KEYDOWN) {
-			move = true;
-		} else {
-			move = false;
-		}
-	}
-
 	void update() {
-		if (move) {
-			render->dest.x += 1;
-		}
+		if (moveUp) 	render->dest.y -= 1;
+		if (moveDown) 	render->dest.y += 1;
+		if (moveRight)	render->dest.x += 1;
+		if (moveLeft) 	render->dest.x -= 1;
 	}
 };
 

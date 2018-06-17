@@ -2,20 +2,14 @@
 #define _EVENT_SYSTEM_H_
 
 #include <SDL.h>
-#include <map>
+#include <functional>
+#include "Event.h"
 
 namespace Thor_Lucas_Development {
 
 /**
- * Class to be inherited by each observer.
- */
-class EventObserver {
-public:
-	virtual void event(SDL_Event& event) = 0; /**< Must be implemented by observer. */
-};
-
-/**
- * Manages and dispatches events to observers.
+ * Manages and notifies observers of subscribed events.
+ * Register by calling attachKey or attachType.
  */
 class EventSystem {
 private:
@@ -24,41 +18,50 @@ private:
 	 * list, pointing to the next entry. nullptr if no next.
 	 */
 	struct ObserverEntry {
-		EventObserver* observer;
+		Event::EventCallback callback;
 		ObserverEntry* nextEntry; 
+		ObserverEntry(Event::EventCallback cb, ObserverEntry* ne) : callback(cb), nextEntry(ne) {};
 	};
 
-	// TODO: Replace later
-	std::map<int, ObserverEntry*> keyObservers; /**< SDL_Keycode to observer map. */
-	std::map<int, ObserverEntry*> typeObservers; /**< SDL_EventType to observer map. */
+	ObserverEntry* keyObservers[Event::KEYCODE_SIZE]; /**< Keycode to observer map. */
+	ObserverEntry* typeObservers[Event::EVENTTYPE_SIZE]; /**< Type to observer map. */
 
-	SDL_Event event;
-	void notifyKey();
-	void notifyType();
+	SDL_Event sdlevent;
+	Event::Event event;
+
+	void notifyKey(); /**< Notifies observers of key events. */
+	void notifyType(); /**< Notifies observers of type events. */
 public:
-	EventSystem() {};
+	EventSystem() : keyObservers(), typeObservers() {};
 	~EventSystem() {};
 
 	// init, quit
 
 	/**
 	 * Polls the events and notifies the appropriate observers.
+	 * Called by Engine. No need to manually call this ever.
 	 */
 	void handleEvents();
 
 	/**
-	 * Attach an observer to a specific keycode.
-	 * @param o A pointer to the observer (usually you'll use "this").
-	 * @param code the SDL_Keycode to be listened to.
+	 * Attach an observer to a specific keycode. Use this when you want to be
+	 * notified of a specific key press, either up or down.
+	 * Note for the callback, the lambda function will typically look something like this:
+	 * `[&](Event& event) { ... }`
+	 * @param callback a lambda expression of type Event::EventCallback.
+	 * @param code the Event::Keycode to be listened to.
 	 */
-	void attachKey(EventObserver* o, SDL_Keycode code);
+	void attachKey(Event::EventCallback callback, Event::Keycode code);
 
 	/**
 	 * Attach an observer to a specific event type.
-	 * @param o A pointer to the observer (usually you'll use "this").
-	 * @param type the SDL_EventType to be listened to.
+	 * Use this to be notified of any event of type 'type'. For example, QUIT.
+	 * Note for the callback, the lambda function will typically look something like this:
+	 * `[&](Event& event) { ... }`
+	 * @param callback a lambda expression of type Event::EventCallback.
+	 * @param type the Event::EventType to be listened to.
 	 */
-	void attachType(EventObserver* o, SDL_EventType type);
+	void attachType(Event::EventCallback callback, Event::EventType type);
 };
 
 }
