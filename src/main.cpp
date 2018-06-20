@@ -1,14 +1,18 @@
 #include "Engine/Engine.h"
 #include "Engine/Entity/Entity.h"
+#include "Engine/Component/SpriteRenderComponent.h"
+#include <cstdio>
 
 using namespace Thor_Lucas_Development;
 
 class ExLogic : public LogicComponent {
 private:
-	RenderComponent* render;
+	SpriteRenderComponent* render;
 	bool moveLeft, moveRight, moveUp, moveDown;
+	Vector moveX;
+	Vector moveY;
 public:
-	ExLogic(EventSystem& es, RenderComponent* rc) {
+	ExLogic(EventSystem& es, SpriteRenderComponent* rc) {
 		moveLeft = false; moveRight = false; moveUp = false; moveDown = false;
 		render = rc;
 		es.attachKey([&](Event::Event& event) {
@@ -23,17 +27,21 @@ public:
 		es.attachKey([&](Event::Event& event) {
 			moveDown = (event.type == Event::KEYDOWN);
 		}, Event::S);
+
+		moveX = Vector{200, 0};
+		moveY = Vector{0, 200};
 	};
 
 	~ExLogic() {
 		// TODO: Remove function from event system.
 	};
 
-	void update() {
-		if (moveUp) 	render->dest.y -= 1;
-		if (moveDown) 	render->dest.y += 1;
-		if (moveRight)	render->dest.x += 1;
-		if (moveLeft) 	render->dest.x -= 1;
+	void update(Uint32 deltaTime) {
+		float deltaSec = float(deltaTime)/1000.f;
+		if (moveUp) 	render->move(moveY * -deltaSec);
+		if (moveDown) 	render->move(moveY * deltaSec);
+		if (moveRight)	render->move(moveX * deltaSec);
+		if (moveLeft) 	render->move(moveX * -deltaSec);
 	}
 };
 
@@ -44,16 +52,17 @@ private:
 	RenderHandle rHandle;
 public:
 	ExEntity() {
-		rHandle = Engine::get().getRenderSystem().registerComponent(
-			new RenderComponent(
-				Engine::get().getResourceSystem().getTexture("bg"),
-				(SDL_Rect){100, 100, 50, 50}
-			)
+		SpriteRenderComponent* rc = new SpriteRenderComponent(
+			Engine::get().getResourceSystem(),
+			"bg",
+			(Rect){100, 100, 50, 50}
 		);
+
+		rHandle = Engine::get().getRenderSystem().registerComponent(rc);
 		lHandle = Engine::get().getLogicSystem().registerComponent(
 			new ExLogic(
 				Engine::get().getEventSystem(),
-				rHandle->render
+				rc
 			)
 		);
 	};

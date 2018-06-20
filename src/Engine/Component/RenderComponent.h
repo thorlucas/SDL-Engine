@@ -1,23 +1,24 @@
-#ifndef _GRAPHICS_COMPONENT_H_
-#define _GRAPHICS_COMPONENT_H_
+#ifndef _RENDER_COMPONENT_H_
+#define _RENDER_COMPONENT_H_
 
 #include <SDL.h>
-#include "../System/DebugSystem.h"
+#include <cstdio>
+#include "../util.h"
 
 namespace Thor_Lucas_Development {
 
 class RenderComponent {
 friend class RenderSystem;
-private:
-	SDL_Texture* texture;
-	
-public:
-	SDL_Rect dest; // TODO: Temp
+protected:
+	Texture* texture;
+	Rect src;
+	Rect dest;
 
-	RenderComponent(SDL_Texture* t, SDL_Rect d) : texture(t), dest(d) {};
+public:
+	RenderComponent(Texture* t, Rect d, Rect s) : texture(t), dest(d), src(s) {};
 	~RenderComponent() {};
 };
 
 }
 
-#endif //_GRAPHICS_COMPONENT_H_
+#endif //_RENDER_COMPONENT_H_

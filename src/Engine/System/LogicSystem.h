@@ -27,7 +27,7 @@ public:
 	void init();
 	void quit();
 
-	void update();
+	void update(Uint32 deltaTime);
 
 	LogicEntry* registerComponent(LogicComponent* l);
 	void removeComponent(LogicEntry* handle);

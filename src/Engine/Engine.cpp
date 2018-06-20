@@ -60,10 +60,30 @@ LogicSystem& Engine::getLogicSystem() {
 // }
 
 void Engine::mainLoop() {
+	int frames;
+	Uint32 accTime = 0;
+
+	Uint32 currentTime;
+	Uint32 deltaTime;
+	lastTime = SDL_GetTicks();
 	while (!quit) {
+		currentTime = SDL_GetTicks();
+		deltaTime = currentTime - lastTime;
+
 		eventSystem.handleEvents();
-		logicSystem.update();
+		logicSystem.update(deltaTime);
 		renderSystem.render();
+
+		accTime += deltaTime;
+		frames += 1;
+
+		if (accTime >= 1000) {
+			printf("%d FPS\n", frames);
+			accTime = 0;
+			frames = 0;
+		}
+
+		lastTime = currentTime;
 	}
 }
 

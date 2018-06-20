@@ -25,6 +25,7 @@ private:
 	LogicSystem logicSystem;
 	// EntitySystem entitySystem;
 
+	Uint32 lastTime;
 	bool quit;
 public:
 	Engine();

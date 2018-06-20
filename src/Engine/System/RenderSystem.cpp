@@ -34,7 +34,7 @@ void RenderSystem::render() {
 	SDL_RenderClear(renderer);
 	RenderEntry* entry = head;
 	while (entry != nullptr) {
-		SDL_RenderCopy(renderer, entry->render->texture, NULL, &(entry->render->dest));
+		SDL_RenderCopy(renderer, entry->render->texture, &(entry->render->src), &(entry->render->dest));
 		entry = entry->next;
 	}
 	SDL_RenderPresent(renderer);

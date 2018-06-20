@@ -17,10 +17,10 @@ void LogicSystem::quit() {
 	}
 }
 
-void LogicSystem::update() {
+void LogicSystem::update(Uint32 deltaTime) {
 	LogicEntry* entry = head;
 	while (entry != nullptr) {
-		entry->logic->update();
+		entry->logic->update(deltaTime);
 		entry = entry->next;
 	}
 }

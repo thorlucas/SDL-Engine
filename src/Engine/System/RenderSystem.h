@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "../EngineException.h"
 #include "../Component/RenderComponent.h"
+#include <cstdio>
 
 namespace Thor_Lucas_Development {
 
