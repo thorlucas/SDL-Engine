@@ -8,6 +8,7 @@
 #include "System/DebugSystem.h"
 #include "System/EventSystem.h"
 #include "System/LogicSystem.h"
+// #include "System/EntitySystem.h"
 
 namespace Thor_Lucas_Development {
 
@@ -22,6 +23,7 @@ private:
 	ResourceSystem resourceSystem;
 	DebugSystem debugSystem;
 	LogicSystem logicSystem;
+	// EntitySystem entitySystem;
 
 	bool quit;
 public:
@@ -40,6 +42,7 @@ public:
 	DebugSystem& 	getDebugSystem		();
 	EventSystem& 	getEventSystem		();
 	LogicSystem& 	getLogicSystem		();
+	// EntitySystem&	getEntitySystem		();
 
 	void mainLoop();
 };

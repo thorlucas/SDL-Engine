@@ -5,13 +5,16 @@
 
 /**
  * Base entity class. Managed by the EntitySystem.
+ * The EntitySystem calls the init and the quit functions
+ * when the entity is added or removed.
  */
 class Entity {
-private:
-	RenderComponent& renderComponent;
 public:
-	Entity(RenderComponent& rc) : renderComponent(rc) {};
+	Entity() {};
 	~Entity() {};
-}
+
+	// virtual void init() = 0;
+	// virtual void quit() = 0;
+};
 
 #endif //_ENTITY_H_

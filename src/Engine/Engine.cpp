@@ -12,9 +12,13 @@ Engine::Engine() {
 	// init logic system
 	renderSystem.init("Hello, world!");
 	resourceSystem.init(renderSystem.getRenderer());
+	logicSystem.init();
+	// entitySystem.init(100);
 }
 
 Engine::~Engine() {
+	// entitySystem.quit();
+	logicSystem.quit();
 	resourceSystem.quit();
 	renderSystem.quit();
 	// quit debug system
@@ -50,6 +54,10 @@ DebugSystem& Engine::getDebugSystem() {
 LogicSystem& Engine::getLogicSystem() {
 	return logicSystem;
 }
+
+// EntitySystem& Engine::getEntitySystem() {
+// 	return entitySystem;
+// }
 
 void Engine::mainLoop() {
 	while (!quit) {

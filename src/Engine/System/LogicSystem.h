@@ -7,19 +7,33 @@
 namespace Thor_Lucas_Development {
 
 class LogicSystem {
+public:
+	struct LogicEntry {
+		LogicEntry* next;
+		LogicComponent* logic;
+		LogicEntry* prev;
+
+		~LogicEntry() {
+			delete logic;
+		};
+	};
+
 private:
-	std::vector<LogicComponent*> components;
+	LogicEntry* head;
 public:
 	LogicSystem() {};
 	~LogicSystem() {};
 
-	// void init();
-	// void quit();
+	void init();
+	void quit();
 
 	void update();
 
-	void addLogicComponent(LogicComponent* l);
+	LogicEntry* registerComponent(LogicComponent* l);
+	void removeComponent(LogicEntry* handle);
 };
+
+typedef LogicSystem::LogicEntry* LogicHandle;
 
 }
 

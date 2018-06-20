@@ -9,11 +9,7 @@ namespace Thor_Lucas_Development {
 class LogicComponent {
 friend class LogicSystem;
 public:
-	LogicComponent() {};
-	~LogicComponent() {};
-
-	virtual void init() = 0;
-	virtual void quit() = 0;
+	virtual ~LogicComponent() {};
 
 	virtual void update() = 0;
 };

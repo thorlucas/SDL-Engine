@@ -1,22 +1,15 @@
 #include "Engine/Engine.h"
+#include "Engine/Entity/Entity.h"
 
 using namespace Thor_Lucas_Development;
-
-struct Entity {
-	LogicComponent* logic;
-	RenderComponent* render;
-};
 
 class ExLogic : public LogicComponent {
 private:
 	RenderComponent* render;
 	bool moveLeft, moveRight, moveUp, moveDown;
 public:
-	ExLogic() {};
-	~ExLogic() {};
-
-	void init() {};
-	void init(EventSystem& es, RenderComponent* rc) {
+	ExLogic(EventSystem& es, RenderComponent* rc) {
+		moveLeft = false; moveRight = false; moveUp = false; moveDown = false;
 		render = rc;
 		es.attachKey([&](Event::Event& event) {
 			moveRight = (event.type == Event::KEYDOWN);
@@ -30,9 +23,11 @@ public:
 		es.attachKey([&](Event::Event& event) {
 			moveDown = (event.type == Event::KEYDOWN);
 		}, Event::S);
-	}
+	};
 
-	void quit() {};
+	~ExLogic() {
+		// TODO: Remove function from event system.
+	};
 
 	void update() {
 		if (moveUp) 	render->dest.y -= 1;
@@ -42,20 +37,44 @@ public:
 	}
 };
 
+
+class ExEntity : public Entity {
+private:
+	LogicHandle lHandle;
+	RenderHandle rHandle;
+public:
+	ExEntity() {
+		rHandle = Engine::get().getRenderSystem().registerComponent(
+			new RenderComponent(
+				Engine::get().getResourceSystem().getTexture("bg"),
+				(SDL_Rect){100, 100, 50, 50}
+			)
+		);
+		lHandle = Engine::get().getLogicSystem().registerComponent(
+			new ExLogic(
+				Engine::get().getEventSystem(),
+				rHandle->render
+			)
+		);
+	};
+
+	~ExEntity() {
+		Engine::get().getLogicSystem().removeComponent(lHandle);
+		Engine::get().getRenderSystem().removeComponent(rHandle);
+	};
+};
+
 int main(int argc, char const *argv[]) {
-	// Engine engine = Engine();
 	Engine& engine = Engine::get();
 	engine.init();
 
 	engine.getResourceSystem().loadTexture("bg", "./resources/bg.jpg");
-	RenderComponent& rc = engine.getRenderSystem().getNewComponent();
-	rc.init(engine.getResourceSystem().getTexture("bg"), 100, 100, 50, 50);
-	ExLogic log;
-	log.init(engine.getEventSystem(), &rc);
-	engine.getLogicSystem().addLogicComponent(&log);
-	Entity c = Entity{&log, &rc};
+
+	ExEntity* entity = new ExEntity;
 
 	engine.mainLoop();
+
+	delete entity;
 
 	return 0;
 }

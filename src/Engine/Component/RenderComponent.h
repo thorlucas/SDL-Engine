@@ -10,20 +10,12 @@ class RenderComponent {
 friend class RenderSystem;
 private:
 	SDL_Texture* texture;
+	
 public:
-	SDL_Rect dest; // TODO: temporary
+	SDL_Rect dest; // TODO: Temp
 
-	RenderComponent() {};
+	RenderComponent(SDL_Texture* t, SDL_Rect d) : texture(t), dest(d) {};
 	~RenderComponent() {};
-
-	SDL_Texture* getTexture();
-
-	/**
-	 * Initializes the component.
-	 * @param t the texture to be rendered.
-	 */
-	void init(SDL_Texture* t, int x, int y, int w, int h);
-	void quit() {};
 };
 
 }

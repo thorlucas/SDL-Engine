@@ -1,13 +1,9 @@
 #ifndef _RENDER_SYSTEM_H_
 #define _RENDER_SYSTEM_H_
 
-#include <vector>
 #include <SDL.h>
 #include "../EngineException.h"
 #include "../Component/RenderComponent.h"
-#include "DebugSystem.h"
-
-#include <cstdio>
 
 namespace Thor_Lucas_Development {
 
@@ -19,11 +15,22 @@ namespace Thor_Lucas_Development {
  * TODO: Consider making this a friend of Engine and the constructor private.
  */
 class RenderSystem {
+public:
+	struct RenderEntry {
+		RenderEntry* prev;
+		RenderComponent* render;
+		RenderEntry* next;
+
+		~RenderEntry() {
+			delete render;
+		};
+	};
+
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
-	std::vector<RenderComponent> components; /**< All the components which are rendered on render(). TODO: Replace. */
+	RenderEntry* head;
 public:
 	RenderSystem() {};
 	~RenderSystem() {};
@@ -42,30 +49,16 @@ public:
 			  int w = 640, int h = 480,
 			  int x = SDL_WINDOWPOS_UNDEFINED, int y = SDL_WINDOWPOS_UNDEFINED,
 			  Uint32 f = 0);
+	void quit(); /**< Destroys the window and the renderer. */
 
-	/**
-	 * Destroys the window and the renderer.
-	 */
-	void quit();
+	void render(); /**< Renders all components. */
+	SDL_Renderer* getRenderer(); /**< TODO: Do we still need this? */
 
-	/**
-	 * Renders all components.
-	 */
-	void render();
-
-	/**
-	 * @returns the renderer used.
-	 * TODO: Do we still need this?
-	 */
-	SDL_Renderer* getRenderer();
-
-	/**
-	 * Creates a new component in this system.
-	 * The component must still be initialized as normal.
-	 * @returns a reference to the created component.
-	 */
-	RenderComponent& getNewComponent();
+	RenderEntry* registerComponent(RenderComponent* component);
+	void removeComponent(RenderEntry* handle);
 };
+
+typedef RenderSystem::RenderEntry* RenderHandle;
 
 }
 

@@ -13,17 +13,29 @@ void RenderSystem::init(const char* t, int w, int h, int x, int y, Uint32 f) {
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == nullptr) throw EngineException("Failed to initialize renderer.");
+
+	head = nullptr;
 }
 
 void RenderSystem::quit() {
+	RenderEntry* entry = head;
+	RenderEntry* next;
+	while (entry != nullptr) {
+		next = entry->next;
+		delete entry;
+		entry = next;
+	}
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 }
 
 void RenderSystem::render() {
 	SDL_RenderClear(renderer);
-	for (auto it : components) {
-		SDL_RenderCopy(renderer, it.texture, NULL, &it.dest);
+	RenderEntry* entry = head;
+	while (entry != nullptr) {
+		SDL_RenderCopy(renderer, entry->render->texture, NULL, &(entry->render->dest));
+		entry = entry->next;
 	}
 	SDL_RenderPresent(renderer);
 }
@@ -32,9 +44,23 @@ SDL_Renderer* RenderSystem::getRenderer() {
 	return renderer;
 }
 
-RenderComponent& RenderSystem::getNewComponent() {
-	components.emplace_back();
-	return components.back();
+RenderSystem::RenderEntry* RenderSystem::registerComponent(RenderComponent* component) {
+	RenderEntry* entry = new RenderEntry{nullptr, component, head};
+	if (head != nullptr) head->prev = entry;
+	head = entry;
+
+	return entry;
+}
+
+void RenderSystem::removeComponent(RenderEntry* handle) {
+	if (handle->prev != nullptr)
+		handle->prev->next = handle->next;
+	else
+		head = handle->next;
+
+	if (handle->next != nullptr) handle->next->prev = handle->prev;
+
+	delete handle;
 }
 
 } // namespace Thor_Lucas_Development
